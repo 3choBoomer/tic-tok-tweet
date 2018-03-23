@@ -1,0 +1,8 @@
+dist: trusty
+addons:
+  chrome: stable
+language: node_js
+node_js:
+  - "6.12.2"
+before_install:
+  - npm i -g npm@3.10.10
