@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const authHandler = require('./lib/auth');
 const bodyParser = require('body-parser');
+const config = require('ih-config');
 
 app.use(bodyParser.json())
 
@@ -14,4 +15,4 @@ app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
-app.listen(process.env.PORT || 8000);
+app.listen(config.get('PORT') || 8000);
