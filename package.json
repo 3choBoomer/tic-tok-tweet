@@ -24,14 +24,18 @@
     "@angular/platform-browser": "^5.2.0",
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
+    "@ng-bootstrap/ng-bootstrap": "^1.1.0",
+    "body-parser": "^1.18.2",
+    "bootstrap": "^4.0.0",
     "core-js": "^2.4.1",
     "express": "^4.16.3",
-    "rxjs": "^5.5.6",
-    "typescript": "~2.5.3",
-    "zone.js": "^0.8.19",
     "ih-config": "^1.0.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.3",
+    "rxjs": "^5.5.6",
     "twitter-lite": "0.5.0",
-    "body-parser": "^1.18.2"
+    "typescript": "~2.5.3",
+    "zone.js": "^0.8.19"
   },
   "devDependencies": {
     "@angular/language-service": "^5.2.0",
