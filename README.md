@@ -3,7 +3,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ![alt text](https://travis-ci.org/3choBoomer/tic-tok-tweet.svg?branch=master "Travis Build Status")
 
-The most recent commits to the master branch of this project will be automatically deployed to [Heroku](https://tic-tok-tweet.herokuapp.com) after a clean build on [Travis](https://travis-ci.org). (See travis build Status above).
+The most recent commits to the master branch of this project will be automatically deployed to [Heroku](https://tic-tok-tweet.herokuapp.com) after a clean build on [Travis](https://travis-ci.org/3choBoomer/tic-tok-tweet). (See travis build Status above).
 
 
 ## Configure the app
