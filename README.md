@@ -14,13 +14,14 @@ The most recent commits to the master branch of this project will be automatical
 
 By default, the application runs is served on port 8000. You can override this by changing the PORT value in the config file mentioned above.
 
-1. npm install
-2. npm start
+1. `npm install`
+2. `npm start`
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+npm install will automatically run the build process, but you can also manually do it:
 
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 ## Running unit tests
 
 Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io) and Jasmine.
