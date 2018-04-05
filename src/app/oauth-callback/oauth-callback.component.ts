@@ -48,6 +48,8 @@ export class OauthCallbackComponent implements OnInit {
     const scheduledTime = new Date(this.selectedDate.year,
       this.selectedDate.month - 1, this.selectedDate.day,
       this.selectedTime.hour, this.selectedTime.minute);
+    console.log('now', new Date().toISOString());
+    console.log('scheduledTime', scheduledTime.toISOString());
     if (new Date() >= scheduledTime) {
       this.invalidScheduledTime = true;
       return;
