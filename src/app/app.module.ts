@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 import { AppComponent } from './app.component';
 import { OauthCallbackComponent } from './oauth-callback/oauth-callback.component';
 import { AuthenticateComponent } from './authenticate/authenticate.component';
+import { ScheduleService } from './schedule.service';
 
 
 const appRoutes: Routes = [
@@ -31,7 +32,7 @@ const appRoutes: Routes = [
       { enableTracing: true } // <-- debugging purposes only
     )
   ],
-  providers: [AuthService],
+  providers: [AuthService, ScheduleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
