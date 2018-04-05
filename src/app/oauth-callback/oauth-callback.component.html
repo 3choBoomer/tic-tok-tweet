@@ -1,7 +1,7 @@
 <form [ngClass]="{ 'visible':showForm, 'invisible':!showForm }">
     <div class="form-group">
       <label for="tweetTextArea">Tweet:</label>
-      <textarea class="form-control " id="tweetTextArea" rows="3"></textarea>
+      <textarea class="form-control" [(ngModel)]="tweetText" id="tweetTextArea" rows="3" name="tweetText"></textarea>
     </div>
     <div class="form-group">
       <ngb-datepicker #dp [(ngModel)]="selectedDate" [minDate]="minDate" name='dp'></ngb-datepicker>
@@ -9,4 +9,11 @@
     <div class="form-group">
       <ngb-timepicker #tp [(ngModel)]="selectedTime" name='tp'></ngb-timepicker>
     </div>
+    <div class="btn-group btn-group-toggle btn-block">
+        <label class="btn-primary btn-block" ngbButtonLabel>
+            <input type="checkbox" ngbButton (click)="onScheduleTweet()"> Schedule Tweet
+        </label>
+  </div>
 </form>
+{{selectedDate | json}} 
+{{selectedTime | json}}

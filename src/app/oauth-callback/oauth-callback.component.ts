@@ -8,6 +8,7 @@ import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker'
 import { NgbTimepicker } from '@ng-bootstrap/ng-bootstrap/timepicker/timepicker';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date-struct';
 import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-struct';
+import { ScheduleService } from '../schedule.service';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -15,25 +16,53 @@ import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-st
   styleUrls: ['./oauth-callback.component.css']
 })
 export class OauthCallbackComponent implements OnInit {
+  screenName: string;
+  invalidScheduledTime: boolean;
   oauthToken: string;
-  oauthVerifier: string;
+  oauthSecret: string;
+  tweetText: string;
   selectedDate: NgbDateStruct;
   selectedTime: NgbTimeStruct = {hour: (new Date()).getHours(), minute: (new Date()).getMinutes() + 1, second: undefined};
   minDate: NgbDateStruct = {year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate()};
   showForm = false;
-  constructor(private route: ActivatedRoute, private _authService: AuthService) { }
+
+  constructor(private scheduleService: ScheduleService, private route: ActivatedRoute, private _authService: AuthService) { }
 
   ngOnInit() {
     this.route.queryParams.mergeMap(params => {
       console.log(params);
-      this.oauthToken = params['oauth_token'];
-      this.oauthVerifier = params['oauth_verifier'];
-      return this._authService.getAccessToken(this.oauthToken, this.oauthVerifier);
+      const oauthToken = params['oauth_token'];
+      const oauthVerifier = params['oauth_verifier'];
+      return this._authService.getAccessToken(oauthToken, oauthVerifier);
     }).subscribe( accessTokenResponse => {
       if (accessTokenResponse.screen_name) {
         this.showForm = true;
+        this.oauthToken = accessTokenResponse.oauth_token;
+        this.oauthSecret = accessTokenResponse.oauth_token_secret;
+        this.screenName = accessTokenResponse.screen_name;
       }
     });
+  }
+
+  onScheduleTweet() {
+    const scheduledTime = new Date(this.selectedDate.year,
+      this.selectedDate.month - 1, this.selectedDate.day,
+      this.selectedTime.hour, this.selectedTime.minute);
+    if (new Date() >= scheduledTime) {
+      this.invalidScheduledTime = true;
+      return;
+    }
+    this.invalidScheduledTime = false;
+    const body = {
+      'dateTime': scheduledTime,
+      'oauthToken': this.oauthToken,
+      'oauthSecret': this.oauthSecret,
+      'screenName': this.screenName,
+      'tweetText': this.tweetText
+     };
+    this.scheduleService.scheduleTweet(body).subscribe();
+
+
   }
 
 }

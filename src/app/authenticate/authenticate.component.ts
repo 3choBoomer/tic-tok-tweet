@@ -10,10 +10,10 @@ import { Observable } from 'rxjs/Observable';
 export class AuthenticateComponent implements OnInit {
 
   public oauthToken: string;
-  constructor(private _authService: AuthService) { }
+  constructor(private authService: AuthService) { }
 
   onAuthenticateToTwitter() {
-    this._authService.getRequestToken().subscribe(
+    this.authService.getRequestToken().subscribe(
       data => { this.oauthToken = data['oauth_token']; },
       err => console.error(err),
       () => window.location.href = 'https://api.twitter.com/oauth/authenticate?oauth_token=' + this.oauthToken
