@@ -2,19 +2,22 @@
   <div class="row">
     <div class="col-sm-6 form-group">
       <label for="tweetTextArea">Tweet:</label>
-      <textarea class="form-control" [(ngModel)]="tweetText" id="tweetTextArea" rows="4" name="tweetText"></textarea>
+      <textarea class="form-control" [(ngModel)]="tweetText" id="tweetTextArea" rows="4" name="tweetText" (ngModelChange)="validate()"></textarea>
     </div>
     <div class="col-sm form-group">
-      <ngb-datepicker #dp [(ngModel)]="selectedDate" [minDate]="minDate" name='dp'></ngb-datepicker>
+      <ngb-datepicker #dp [(ngModel)]="selectedDate" (ngModelChange)="validate()" [minDate]="minDate" name='dp'></ngb-datepicker>
     </div>
     <div class="col-sm form-group">
-        <ngb-timepicker class="pull-right" #tp [(ngModel)]="selectedTime" name='tp'></ngb-timepicker>
-      </div>
+      <ngb-timepicker class="pull-right" #tp [(ngModel)]="selectedTime" (ngModelChange)="validate()" name='tp'></ngb-timepicker>
+    </div>
+  </div>
+  <div [ngClass]="{'text-danger':true, visible:invalidScheduledTime, invisible:!invalidScheduledTime}">
+    <label>Select a valid date and time and enter a tweet</label>
   </div>
   <div class="row">
-    <div class="col-sm btn-group btn-group-toggle btn-block">
-      <label class="btn-primary btn-block" ngbButtonLabel>
-        <input type="checkbox" ngbButton (click)="onScheduleTweet()"> Schedule Tweet
+    <div [ngClass]="{'col-sm':true, 'btn-group':true, 'btn-group-toggle':true, 'btn-block':true}">
+      <label [ngClass]="{'btn-primary':true, 'btn-block':true, disabled:invalidScheduledTime}" ngbButtonLabel>
+        <input type="checkbox" [disabled]="invalidScheduledTime" [ngClass]="{disabled:invalidScheduledTime}" ngbButton (click)="onScheduleTweet()"> Schedule Tweet
       </label>
     </div>
   </div>

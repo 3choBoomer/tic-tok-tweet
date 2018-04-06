@@ -17,11 +17,11 @@ import { ScheduleService } from '../schedule.service';
 })
 export class OauthCallbackComponent implements OnInit {
   screenName: string;
-  invalidScheduledTime: boolean;
+  invalidScheduledTime = true;
   oauthToken: string;
   oauthSecret: string;
   tweetText: string;
-  selectedDate: NgbDateStruct;
+  selectedDate: NgbDateStruct = {year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate()};
   selectedTime: NgbTimeStruct = {hour: (new Date()).getHours(), minute: (new Date()).getMinutes() + 1, second: undefined};
   minDate: NgbDateStruct = {year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate()};
   showForm = false;
@@ -30,7 +30,6 @@ export class OauthCallbackComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.mergeMap(params => {
-      console.log(params);
       const oauthToken = params['oauth_token'];
       const oauthVerifier = params['oauth_verifier'];
       return this._authService.getAccessToken(oauthToken, oauthVerifier);
@@ -44,17 +43,20 @@ export class OauthCallbackComponent implements OnInit {
     });
   }
 
+  validate() {
+    const scheduledTime = new Date(this.selectedDate.year,
+      this.selectedDate.month - 1, this.selectedDate.day,
+      this.selectedTime.hour, this.selectedTime.minute);
+    if ((new Date() < scheduledTime) && this.tweetText) {
+      this.invalidScheduledTime = false;
+    } else {
+      this.invalidScheduledTime = true;
+    }
+  }
   onScheduleTweet() {
     const scheduledTime = new Date(this.selectedDate.year,
       this.selectedDate.month - 1, this.selectedDate.day,
       this.selectedTime.hour, this.selectedTime.minute);
-    console.log('now', new Date().toISOString());
-    console.log('scheduledTime', scheduledTime.toISOString());
-    if (new Date() >= scheduledTime) {
-      this.invalidScheduledTime = true;
-      return;
-    }
-    this.invalidScheduledTime = false;
     const body = {
       'dateTime': scheduledTime,
       'oauthToken': this.oauthToken,
@@ -63,8 +65,6 @@ export class OauthCallbackComponent implements OnInit {
       'tweetText': this.tweetText
      };
     this.scheduleService.scheduleTweet(body).subscribe();
-
-
   }
 
 }
