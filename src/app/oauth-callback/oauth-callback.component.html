@@ -15,10 +15,17 @@
     <label>Select a valid date and time and enter a tweet</label>
   </div>
   <div class="row">
-    <div [ngClass]="{'col-sm':true, 'btn-group':true, 'btn-group-toggle':true, 'btn-block':true}">
+    <div class="col-sm btn-group btn-group-toggle btn-block">
       <label [ngClass]="{'btn-primary':true, 'btn-block':true, disabled:invalidScheduledTime}" ngbButtonLabel>
         <input type="checkbox" [disabled]="invalidScheduledTime" [ngClass]="{disabled:invalidScheduledTime}" ngbButton (click)="onScheduleTweet()"> Schedule Tweet
       </label>
     </div>
   </div>
+  <div class="row justify-content-center">
+      <div [ngClass]={show:tweetScheduled} class="zeroOpacity" >
+        <h3>
+          Tweet Scheduled!
+        </h3>
+      </div>
+    </div>
 </div>

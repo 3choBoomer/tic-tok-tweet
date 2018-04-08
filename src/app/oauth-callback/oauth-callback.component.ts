@@ -13,58 +13,94 @@ import { ScheduleService } from '../schedule.service';
 @Component({
   selector: 'app-oauth-callback',
   templateUrl: './oauth-callback.component.html',
-  styleUrls: ['./oauth-callback.component.css']
+  styleUrls: ['./oauth-callback.component.css'],
+  styles: [
+    '.show{ opacity: 1 !important; }',
+    '.zeroOpacity { opacity: 0; transition: .5s ease-in-out all; }'
+  ]
 })
 export class OauthCallbackComponent implements OnInit {
   screenName: string;
   invalidScheduledTime = true;
+  tweetScheduled = false;
   oauthToken: string;
   oauthSecret: string;
   tweetText: string;
-  selectedDate: NgbDateStruct = {year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate()};
-  selectedTime: NgbTimeStruct = {hour: (new Date()).getHours(), minute: (new Date()).getMinutes() + 1, second: undefined};
-  minDate: NgbDateStruct = {year: (new Date()).getFullYear(), month: (new Date()).getMonth() + 1, day: (new Date()).getDate()};
+  selectedDate: NgbDateStruct = {
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+    day: new Date().getDate()
+  };
+  selectedTime: NgbTimeStruct = {
+    hour: new Date().getHours(),
+    minute: new Date().getMinutes() + 1,
+    second: undefined
+  };
+  minDate: NgbDateStruct = {
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+    day: new Date().getDate()
+  };
   showForm = false;
 
-  constructor(private scheduleService: ScheduleService, private route: ActivatedRoute, private _authService: AuthService) { }
+  constructor(
+    private scheduleService: ScheduleService,
+    private route: ActivatedRoute,
+    private _authService: AuthService
+  ) {}
 
   ngOnInit() {
-    this.route.queryParams.mergeMap(params => {
-      const oauthToken = params['oauth_token'];
-      const oauthVerifier = params['oauth_verifier'];
-      return this._authService.getAccessToken(oauthToken, oauthVerifier);
-    }).subscribe( accessTokenResponse => {
-      if (accessTokenResponse.screen_name) {
-        this.showForm = true;
-        this.oauthToken = accessTokenResponse.oauth_token;
-        this.oauthSecret = accessTokenResponse.oauth_token_secret;
-        this.screenName = accessTokenResponse.screen_name;
-      }
-    });
+    this.route.queryParams
+      .mergeMap(params => {
+        const oauthToken = params['oauth_token'];
+        const oauthVerifier = params['oauth_verifier'];
+        return this._authService.getAccessToken(oauthToken, oauthVerifier);
+      })
+      .subscribe(accessTokenResponse => {
+        if (accessTokenResponse.screen_name) {
+          this.showForm = true;
+          this.oauthToken = accessTokenResponse.oauth_token;
+          this.oauthSecret = accessTokenResponse.oauth_token_secret;
+          this.screenName = accessTokenResponse.screen_name;
+        }
+      });
   }
 
   validate() {
-    const scheduledTime = new Date(this.selectedDate.year,
-      this.selectedDate.month - 1, this.selectedDate.day,
-      this.selectedTime.hour, this.selectedTime.minute);
-    if ((new Date() < scheduledTime) && this.tweetText) {
+    const scheduledTime = new Date(
+      this.selectedDate.year,
+      this.selectedDate.month - 1,
+      this.selectedDate.day,
+      this.selectedTime.hour,
+      this.selectedTime.minute
+    );
+    if (new Date() < scheduledTime && this.tweetText) {
       this.invalidScheduledTime = false;
     } else {
       this.invalidScheduledTime = true;
     }
   }
   onScheduleTweet() {
-    const scheduledTime = new Date(this.selectedDate.year,
-      this.selectedDate.month - 1, this.selectedDate.day,
-      this.selectedTime.hour, this.selectedTime.minute);
+    const scheduledTime = new Date(
+      this.selectedDate.year,
+      this.selectedDate.month - 1,
+      this.selectedDate.day,
+      this.selectedTime.hour,
+      this.selectedTime.minute
+    );
     const body = {
-      'dateTime': scheduledTime,
-      'oauthToken': this.oauthToken,
-      'oauthSecret': this.oauthSecret,
-      'screenName': this.screenName,
-      'tweetText': this.tweetText
-     };
-    this.scheduleService.scheduleTweet(body).subscribe();
+      dateTime: scheduledTime,
+      oauthToken: this.oauthToken,
+      oauthSecret: this.oauthSecret,
+      screenName: this.screenName,
+      tweetText: this.tweetText
+    };
+    this.scheduleService.scheduleTweet(body).subscribe(res => {
+      this.tweetScheduled = true;
+      // quick animation without having to dig through tons of angular docs to figure that out
+      setTimeout(() => {
+        this.tweetScheduled = false;
+      }, 3000);
+    });
   }
-
 }
