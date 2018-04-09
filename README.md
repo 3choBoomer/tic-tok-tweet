@@ -5,6 +5,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 The most recent commits to the master branch of this project will be automatically deployed to [Heroku](https://tic-tok-tweet.herokuapp.com) after a clean build on [Travis](https://travis-ci.org/3choBoomer/tic-tok-tweet). (See travis build Status above).
 
+## prereqs
+1. [node 6.12.2](https://nodejs.org/download/release/v6.12.2/)
+2. npm 3.10.10 (bundled with the above version of node)
+3. angular cli 1.7.3 `npm i @angular/cli@1.7.3`
+
 
 ## Configure the app
 1. copy `.\config\app.config.js` to `.\config\app.config.local.js`.
